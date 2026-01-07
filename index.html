@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metro Transit Go-To Pass</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 110vh;
+      background-color: #f0f0f0;
+      padding: 1rem;
+    }
+
+    /* 9:16 aspect ratio ticket container */
+    .ticket-container {
+      width: 100%;
+      max-width: 400px;
+      height: 720px;
+      background-color: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 0 0;
+      text-align: left;
+    }
+
+    /* Header styles */
+    .ticket-header {
+      background-color: white; /* Metro Transit maroon */
+      color: #8B1538;
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .ticket-header h1 {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .ticket-header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* Go-To Logo (SVG) */
+    .animation-box {
+	  position: relative;
+      width: 280px;
+      height: 280px;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+      margin: 4px 0;
+    }
+	
+	.ticket-gif  {
+	  width: 270px;
+	  height: 270px;
+	  object-fit: contain;
+	  border-radius: 50%;
+	}
+
+    /* Clock styles */
+    .ticket-clock {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #333;
+      margin: 0rem 0;
+      letter-spacing: 0.1rem;
+    }
+
+    /* Fare type pill */
+    .ticket-fare {
+      background-color: #357C3D; /* Green */
+      color: white;
+      font-size: 3.0rem;
+      font-weight: bold;
+      padding: 0.5rem 3rem;
+      border-radius: 3rem;
+      margin: 2rem 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Details styles */
+    .ticket-details {
+      margin-top: auto; /* Pushes details to the bottom */
+      width: 100%;
+      text-align: left;
+      padding: 0 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .ticket-details p {
+      margin-bottom: 0.5rem;
+    }
+
+    .ticket-details strong {
+      font-size: 1.5rem;
+    }
+
+    #expiration {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket-container">
+    <!-- Header -->
+    <div class="ticket-header">
+      <h1>Metro Transit</h1>
+      <p>Show operator your ticket</p>
+    </div>
+
+    <!-- Go-To Logo (SVG) -->
+    <div class="animation-box">
+	  <div class="tix-gif">
+		<img src="tix.gif">
+	  </div>
+	</div>
+
+    <!-- Clock -->
+    <div class="ticket-clock" id="clock">10:48:06 PM</div>
+
+    <!-- Fare Type -->
+    <div class="ticket-fare">Reduced</div>
+
+    <!-- Details -->
+    <div class="ticket-details">
+      <p><strong>Senior/Youth/Medicare Non-Rush Hour</strong></p>
+      <p>Minneapolis/St. Paul Metro Area</p>
+      <p>Expires <span id="expiration">Dec 15, 2025, 1:16 AM</span></p>
+    </div>
+  </div>
+<script>
+  // Update the clock every second
+  function updateClock() {
+    const clockElement = document.getElementById('clock');
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    hours = hours.toString().padStart(2, '0');
+    clockElement.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+  }
+
+  // Update immediately and then every second
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Set expiration to current time + 2.5 hours
+  function formatExpirationDate() {
+    const now = new Date();
+    const expiration = new Date(now.getTime() + 2.5 * 60 * 60 * 1000);
+
+    return expiration.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  document.getElementById('expiration').textContent = formatExpirationDate();
+</script>
+
+</body>
+</html>
