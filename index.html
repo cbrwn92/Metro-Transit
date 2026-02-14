@@ -2,186 +2,171 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Metro Transit Go-To Pass</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Metro Transit Ticket</title>
   <style>
-    /* Reset and base styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
+    /* Reset for iOS Look */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif; }
+    
+    body { 
+      background-color: #ffffff; 
+      display: flex; 
+      justify-content: center; 
+      height: 100vh; 
+      color: #333;
+      -webkit-font-smoothing: antialiased;
     }
 
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 110vh;
-      background-color: #f0f0f0;
-      padding: 1rem;
-    }
-
-    /* 9:16 aspect ratio ticket container */
     .ticket-container {
       width: 100%;
-      max-width: 400px;
-      height: 720px;
-      background-color: white;
-      border-radius: 0.5rem;
-      overflow: hidden;
+      max-width: 450px;
+      padding: 15px 25px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 0 0 0;
-      text-align: left;
     }
 
-    /* Header styles */
-    .ticket-header {
-      background-color: white; /* Metro Transit maroon */
-      color: #8B1538;
+    /* Top Navigation Mockup */
+    .top-bar {
       width: 100%;
-      padding: 1rem;
-      margin-bottom: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 25px;
+    }
+    .close-x { font-size: 24px; color: #0053A0; font-weight: bold; }
+
+    /* Header Text */
+    .header-text { width: 100%; text-align: left; margin-bottom: 30px; }
+    .header-text h1 { font-size: 26px; font-weight: 700; color: #3b3b3b; }
+    .header-text p { font-size: 15px; color: #666; margin-top: 2px; }
+
+    /* The Smooth Animated Outer Ring */
+    .animation-container {
+      margin: 10px 0;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .ticket-header h1 {
-      font-size: 1.5rem;
-      font-weight: bold;
+    .orange-ring {
+      width: 215px;
+      height: 215px;
+      border: 24px solid #F37021; 
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: pulse-ring 2s infinite ease-in-out;
+      overflow: hidden; /* This helps clip anything that sticks out */
     }
 
-    .ticket-header p {
-      font-size: 0.9rem;
-      opacity: 0.9;
+    @keyframes pulse-ring {
+      0% { transform: scale(1); border-width: 24px; }
+      50% { transform: scale(1.04); border-width: 21px; }
+      100% { transform: scale(1); border-width: 24px; }
     }
 
-    /* Go-To Logo (SVG) */
-    .animation-box {
-	  position: relative;
-      width: 280px;
-      height: 280px;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-      margin: 4px 0;
+    /* LOGO CLIPPING: This hides the choppy edges of your GIF */
+    .logo-clipper {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%; /* Makes the viewing window a circle */
+      overflow: hidden;   /* Hides the outer choppy rings of your GIF */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white; 
     }
-	
-	.ticket-gif  {
-	  width: 270px;
-	  height: 270px;
-	  object-fit: contain;
-	  border-radius: 50%;
-	}
 
-    /* Clock styles */
+    .logo-img {
+      width: 160px;       /* We make the GIF slightly larger inside the clipper */
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* Digital Clock */
     .ticket-clock {
-      font-size: 3.5rem;
-      font-weight: bold;
-      color: #333;
-      margin: 0rem 0;
-      letter-spacing: 0.1rem;
+      font-size: 70px;
+      font-weight: 700;
+      color: #404040;
+      margin: 25px 0;
+      letter-spacing: -2px;
     }
 
-    /* Fare type pill */
-    .ticket-fare {
-      background-color: #357C3D; /* Green */
-      color: white;
-      font-size: 3.0rem;
-      font-weight: bold;
-      padding: 0.5rem 3rem;
-      border-radius: 3rem;
-      margin: 2rem 0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Details styles */
-    .ticket-details {
-      margin-top: auto; /* Pushes details to the bottom */
+    /* Bottom Details Box */
+    .details-box {
       width: 100%;
+      border: 1px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 18px 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
       text-align: left;
-      padding: 0 0.5rem;
-      font-size: 1.2rem;
     }
 
-    .ticket-details p {
-      margin-bottom: 0.5rem;
-    }
+    .fare-title { font-size: 24px; font-weight: 500; color: #333; margin-bottom: 6px; }
+    .location-text { font-size: 14px; color: #929292; margin-bottom: 25px; }
+    .expiry-text { font-size: 17px; font-weight: 700; color: #707070; }
 
-    .ticket-details strong {
-      font-size: 1.5rem;
-    }
-
-    #expiration {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
   </style>
 </head>
 <body>
-  <div class="ticket-container">
-    <!-- Header -->
-    <div class="ticket-header">
-      <h1>Metro Transit</h1>
-      <p>Show operator your ticket</p>
-    </div>
 
-    <!-- Go-To Logo (SVG) -->
-    <div class="animation-box">
-	  <div class="tix-gif">
-		<img src="tix.gif">
-	  </div>
-	</div>
+<div class="ticket-container">
+  <div class="top-bar">
+    <div class="close-x">✕</div>
+  </div>
 
-    <!-- Clock -->
-    <div class="ticket-clock" id="clock">10:48:06 PM</div>
+  <div class="header-text">
+    <h1>Metro Transit</h1>
+    <p>Show operator your ticket</p>
+  </div>
 
-    <!-- Fare Type -->
-    <div class="ticket-fare">Reduced</div>
-
-    <!-- Details -->
-    <div class="ticket-details">
-      <p><strong>Senior/Youth/Medicare Non-Rush Hour</strong></p>
-      <p>Minneapolis/St. Paul Metro Area</p>
-      <p>Expires <span id="expiration">Dec 15, 2025, 1:16 AM</span></p>
+  <div class="animation-container">
+    <div class="orange-ring">
+      <div class="logo-clipper">
+        <img src="tix.gif" alt="Go-To" class="logo-img">
+      </div>
     </div>
   </div>
+
+  <div class="ticket-clock" id="clock">00:00:00 AM</div>
+
+  <div class="details-box">
+    <p class="fare-title">Adult Non-Rush Hour</p>
+    <p class="location-text">Minneapolis/ St. Paul Metro Area</p>
+    <p class="expiry-text">Expires <span id="expiration"></span></p>
+  </div>
+</div>
+
 <script>
-  // Update the clock every second
   function updateClock() {
-    const clockElement = document.getElementById('clock');
     const now = new Date();
-    let hours = now.getHours();
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    hours = hours.toString().padStart(2, '0');
-    clockElement.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-  }
-
-  // Update immediately and then every second
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  // Set expiration to current time + 2.5 hours
-  function formatExpirationDate() {
-    const now = new Date();
-    const expiration = new Date(now.getTime() + 2.5 * 60 * 60 * 1000);
-
-    return expiration.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+    const timeParts = now.toLocaleTimeString('en-US', { 
+      hour12: true, 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      second: '2-digit' 
     });
+    document.getElementById('clock').textContent = timeParts.toUpperCase();
   }
 
-  document.getElementById('expiration').textContent = formatExpirationDate();
+  function setExpiration() {
+    const now = new Date();
+    // Setting 2.5 hour validity
+    const exp = new Date(now.getTime() + (2.5 * 60 * 60 * 1000));
+    
+    const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+    // Formats precisely to "Feb 12, 2026 5:06 PM"
+    let expStr = exp.toLocaleString('en-US', options).replace(',', ',');
+    document.getElementById('expiration').textContent = expStr;
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+  setExpiration();
 </script>
 
 </body>
 </html>
-
