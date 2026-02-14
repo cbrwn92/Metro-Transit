@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Metro Transit">
   <title>Metro Transit Ticket</title>
   <style>
-    /* Reset for iOS Look */
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     
     body { 
       background-color: #ffffff; 
@@ -26,7 +28,6 @@
       align-items: center;
     }
 
-    /* Top Navigation Mockup */
     .top-bar {
       width: 100%;
       display: flex;
@@ -35,12 +36,11 @@
     }
     .close-x { font-size: 24px; color: #0053A0; font-weight: bold; }
 
-    /* Header Text */
     .header-text { width: 100%; text-align: left; margin-bottom: 30px; }
     .header-text h1 { font-size: 26px; font-weight: 700; color: #3b3b3b; }
     .header-text p { font-size: 15px; color: #666; margin-top: 2px; }
 
-    /* The Smooth Animated Outer Ring */
+    /* The Smooth Pulsing Orange Ring */
     .animation-container {
       margin: 10px 0;
       width: 260px;
@@ -59,34 +59,31 @@
       justify-content: center;
       align-items: center;
       animation: pulse-ring 2s infinite ease-in-out;
-      overflow: hidden; /* This helps clip anything that sticks out */
     }
 
     @keyframes pulse-ring {
       0% { transform: scale(1); border-width: 24px; }
-      50% { transform: scale(1.04); border-width: 21px; }
+      50% { transform: scale(1.03); border-width: 22px; }
       100% { transform: scale(1); border-width: 24px; }
     }
 
-    /* LOGO CLIPPING: This hides the choppy edges of your GIF */
+    /* Clipper for the New Crisp Logo */
     .logo-clipper {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%; /* Makes the viewing window a circle */
-      overflow: hidden;   /* Hides the outer choppy rings of your GIF */
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: white; 
+      background-color: white;
     }
 
     .logo-img {
-      width: 160px;       /* We make the GIF slightly larger inside the clipper */
+      width: 100%;
       height: auto;
-      object-fit: contain;
     }
 
-    /* Digital Clock */
     .ticket-clock {
       font-size: 70px;
       font-weight: 700;
@@ -95,7 +92,6 @@
       letter-spacing: -2px;
     }
 
-    /* Bottom Details Box */
     .details-box {
       width: 100%;
       border: 1px solid #e8e8e8;
@@ -126,12 +122,12 @@
   <div class="animation-container">
     <div class="orange-ring">
       <div class="logo-clipper">
-        <img src="tix.gif" alt="Go-To" class="logo-img">
+        <img src="logo.png" alt="Go-To" class="logo-img">
       </div>
     </div>
   </div>
 
-  <div class="ticket-clock" id="clock">00:00:00 AM</div>
+  <div class="ticket-clock" id="clock">--:--:-- --</div>
 
   <div class="details-box">
     <p class="fare-title">Adult Non-Rush Hour</p>
@@ -154,13 +150,9 @@
 
   function setExpiration() {
     const now = new Date();
-    // Setting 2.5 hour validity
     const exp = new Date(now.getTime() + (2.5 * 60 * 60 * 1000));
-    
     const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
-    // Formats precisely to "Feb 12, 2026 5:06 PM"
-    let expStr = exp.toLocaleString('en-US', options).replace(',', ',');
-    document.getElementById('expiration').textContent = expStr;
+    document.getElementById('expiration').textContent = exp.toLocaleString('en-US', options).replace(' at', '');
   }
 
   setInterval(updateClock, 1000);
