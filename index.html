@@ -8,24 +8,45 @@
   <meta name="apple-mobile-web-app-title" content="Metro Transit">
   <title>Metro Transit Ticket</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif; }
+    /* Reset and Core Styling */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     
-    body { background-color: #ffffff; display: flex; justify-content: center; height: 100vh; color: #333; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    body { 
+      background-color: #ffffff; 
+      display: flex; 
+      justify-content: center; 
+      height: 100vh; 
+      color: #333;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
 
-    .ticket-container { width: 100%; max-width: 450px; padding: 15px 25px; display: flex; flex-direction: column; align-items: center; }
+    .ticket-container {
+      width: 100%;
+      max-width: 450px;
+      padding: 15px 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-    .top-bar { width: 100%; display: flex; justify-content: flex-end; padding-bottom: 25px; }
-    .close-x { font-size: 24px; color: #0053A0; font-weight: bold; }
+    .top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 25px;
+    }
+    .close-x { font-size: 24px; color: #0053A0; font-weight: bold; cursor: pointer; }
 
     .header-text { width: 100%; text-align: left; margin-bottom: 30px; }
     .header-text h1 { font-size: 26px; font-weight: 700; color: #3b3b3b; }
     .header-text p { font-size: 15px; color: #666; margin-top: 2px; }
 
-    /* The Smooth Ripple Animation Area */
+    /* The High-Fidelity Ripple Animation */
     .animation-container {
       margin: 20px 0;
-      width: 280px;
-      height: 280px;
+      width: 320px;
+      height: 320px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -36,20 +57,37 @@
       position: absolute;
       border-radius: 50%;
       opacity: 0;
-      animation: ripple-effect 3s linear infinite;
+      /* cubic-bezier creates that "pop and glide" motion from the real app */
+      animation: ripple-effect 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
     }
 
-    /* THE DARKER CORE RING (Included as requested) */
-    .ripple:nth-child(1) { border: 32px solid #D95400; animation-delay: 0s; z-index: 4; }
+    /* THE DARK INNER CORE - Thick and Bold */
+    .ripple:nth-child(1) { border: 38px solid #D95400; animation-delay: 0s; z-index: 5; }
     
-    /* The lighter outer ripples */
-    .ripple:nth-child(2) { border: 20px solid #F37021; animation-delay: 1s; z-index: 3; }
-    .ripple:nth-child(3) { border: 16px solid #F37021; animation-delay: 2s; z-index: 2; }
+    /* THE TRANSITION RINGS - Moving from Dark to Light */
+    .ripple:nth-child(2) { border: 28px solid #E65D00; animation-delay: 0.8s; z-index: 4; }
+    .ripple:nth-child(3) { border: 22px solid #F37021; animation-delay: 1.6s; z-index: 3; }
+    .ripple:nth-child(4) { border: 18px solid #F37021; animation-delay: 2.4s; z-index: 2; }
+    .ripple:nth-child(5) { border: 12px solid #F37021; animation-delay: 3.2s; z-index: 1; }
 
     @keyframes ripple-effect {
-      0% { width: 100px; height: 100px; opacity: 0; transform: scale(0.8); }
-      20% { opacity: 1; transform: scale(1); }
-      100% { width: 280px; height: 280px; opacity: 0; transform: scale(1.1); }
+      0% {
+        width: 105px;
+        height: 105px;
+        opacity: 0;
+        transform: scale(0.9);
+        border-width: 40px; /* Thick at start */
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        width: 340px;
+        height: 340px;
+        opacity: 0;
+        transform: scale(1.15);
+        border-width: 4px; /* Thins out at the edge */
+      }
     }
 
     .logo-clipper {
@@ -62,23 +100,42 @@
       align-items: center;
       z-index: 10;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
 
     .logo-img { width: 100%; height: auto; }
 
-    .ticket-clock { font-size: 70px; font-weight: 700; color: #404040; margin: 25px 0; letter-spacing: -2px; }
+    /* The Large Clock */
+    .ticket-clock {
+      font-size: 70px;
+      font-weight: 700;
+      color: #404040;
+      margin: 25px 0;
+      letter-spacing: -2px;
+    }
 
-    .details-box { width: 100%; border: 1px solid #e8e8e8; border-radius: 10px; padding: 18px 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); text-align: left; }
+    /* Details Section */
+    .details-box {
+      width: 100%;
+      border: 1px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 18px 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      text-align: left;
+    }
+
     .fare-title { font-size: 24px; font-weight: 500; color: #333; margin-bottom: 6px; }
     .location-text { font-size: 14px; color: #929292; margin-bottom: 25px; }
     .expiry-text { font-size: 17px; font-weight: 700; color: #707070; }
+
   </style>
 </head>
 <body>
 
 <div class="ticket-container">
-  <div class="top-bar"><div class="close-x">✕</div></div>
+  <div class="top-bar">
+    <div class="close-x">✕</div>
+  </div>
 
   <div class="header-text">
     <h1>Metro Transit</h1>
@@ -89,13 +146,15 @@
     <div class="ripple"></div>
     <div class="ripple"></div>
     <div class="ripple"></div>
+    <div class="ripple"></div>
+    <div class="ripple"></div>
     
     <div class="logo-clipper">
       <img src="logo.png" alt="Go-To" class="logo-img">
     </div>
   </div>
 
-  <div class="ticket-clock" id="clock">00:00:00 AM</div>
+  <div id="clock" class="ticket-clock">00:00:00 AM</div>
 
   <div class="details-box">
     <p class="fare-title">Adult Non-Rush Hour</p>
@@ -107,15 +166,24 @@
 <script>
   function updateClock() {
     const now = new Date();
-    const timeParts = now.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' });
+    const timeParts = now.toLocaleTimeString('en-US', { 
+      hour12: true, 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
     document.getElementById('clock').textContent = timeParts.toUpperCase();
   }
 
   function setExpiration() {
     const now = new Date();
+    // Expiration is 2.5 hours from now
     const exp = new Date(now.getTime() + (2.5 * 60 * 60 * 1000));
+    
     const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
-    document.getElementById('expiration').textContent = exp.toLocaleString('en-US', options).replace(' at', '');
+    // Formats precisely to "Feb 15, 2026 at 9:06 PM"
+    let expStr = exp.toLocaleString('en-US', options).replace(',', ',');
+    document.getElementById('expiration').textContent = expStr;
   }
 
   setInterval(updateClock, 1000);
