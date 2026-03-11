@@ -1,195 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Metro Transit">
-  <title>Metro Transit Ticket</title>
-  <style>
-    /* Reset and Core Styling */
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    /* Precision Typography and Layout */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; }
     
-    body { 
-      background-color: #ffffff; 
-      display: flex; 
-      justify-content: center; 
-      height: 100vh; 
-      color: #333;
-      -webkit-font-smoothing: antialiased;
-      overflow: hidden;
-    }
+    body { background-color: #ffffff; display: flex; justify-content: center; height: 100vh; color: #333; -webkit-font-smoothing: antialiased; overflow: hidden; }
 
-    .ticket-container {
-      width: 100%;
-      max-width: 450px;
-      padding: 15px 25px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    .ticket-container { width: 100%; max-width: 450px; padding: 15px 25px; display: flex; flex-direction: column; align-items: center; }
 
-    .top-bar {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      padding-bottom: 25px;
-    }
-    .close-x { font-size: 24px; color: #0053A0; font-weight: bold; cursor: pointer; }
+    .top-bar { width: 100%; display: flex; justify-content: flex-end; padding-bottom: 20px; }
+    .close-x { font-size: 26px; color: #0053A0; font-weight: 500; cursor: pointer; padding: 5px; }
 
-    .header-text { width: 100%; text-align: left; margin-bottom: 30px; }
-    .header-text h1 { font-size: 26px; font-weight: 700; color: #3b3b3b; }
-    .header-text p { font-size: 15px; color: #666; margin-top: 2px; }
+    .header-text { width: 100%; text-align: left; margin-bottom: 25px; }
+    .header-text h1 { font-size: 28px; font-weight: 700; color: #333333; letter-spacing: -0.5px; }
+    .header-text p { font-size: 16px; color: #666; margin-top: 2px; font-weight: 400; }
 
-    /* The High-Fidelity Ripple Animation */
-    .animation-container {
-      margin: 20px 0;
-      width: 320px;
-      height: 320px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+    /* The Layered Circle Animation */
+    .animation-container { margin: 15px 0; width: 320px; height: 320px; display: flex; justify-content: center; align-items: center; position: relative; }
 
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0;
-      /* cubic-bezier creates that "pop and glide" motion from the real app */
-      animation: ripple-effect 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
-    }
+    .base-orange { position: absolute; width: 275px; height: 275px; background-color: #F37021; border-radius: 50%; animation: orange-pulse 3.2s ease-in-out infinite; z-index: 1; }
+    .top-grey { position: absolute; width: 265px; height: 265px; background-color: #ffffff; border-radius: 50%; animation: grey-pulse 3.2s cubic-bezier(0.6, -0.28, 0.735, 1.45) infinite; z-index: 2; }
 
-    /* THE DARK INNER CORE - Thick and Bold */
-    .ripple:nth-child(1) { border: 38px solid #D95400; animation-delay: 0s; z-index: 5; }
-    
-    /* THE TRANSITION RINGS - Moving from Dark to Light */
-    .ripple:nth-child(2) { border: 28px solid #E65D00; animation-delay: 0.8s; z-index: 4; }
-    .ripple:nth-child(3) { border: 22px solid #F37021; animation-delay: 1.6s; z-index: 3; }
-    .ripple:nth-child(4) { border: 18px solid #F37021; animation-delay: 2.4s; z-index: 2; }
-    .ripple:nth-child(5) { border: 12px solid #F37021; animation-delay: 3.2s; z-index: 1; }
+    @keyframes orange-pulse { 0%, 100% { transform: scale(0.8); } 50% { transform: scale(1.1); } }
+    @keyframes grey-pulse { 0%, 100% { transform: scale(0.72); } 60% { transform: scale(1.18); } }
 
-    @keyframes ripple-effect {
-      0% {
-        width: 105px;
-        height: 105px;
-        opacity: 0;
-        transform: scale(0.9);
-        border-width: 40px; /* Thick at start */
-      }
-      10% {
-        opacity: 1;
-      }
-      100% {
-        width: 340px;
-        height: 340px;
-        opacity: 0;
-        transform: scale(1.15);
-        border-width: 4px; /* Thins out at the edge */
-      }
-    }
-
-    .logo-clipper {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background-color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      overflow: hidden;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-
+    .logo-clipper { width: 110px; height: 110px; border-radius: 50%; background-color: white; display: flex; justify-content: center; align-items: center; z-index: 10; overflow: hidden; box-shadow: 0 0 12px rgba(0,0,0,0.06); }
     .logo-img { width: 100%; height: auto; }
 
     /* The Large Clock */
-    .ticket-clock {
-      font-size: 70px;
-      font-weight: 700;
-      color: #404040;
-      margin: 25px 0;
-      letter-spacing: -2px;
-    }
+    .ticket-clock { font-size: 72px; font-weight: 700; color: #3a3a3a; margin: 20px 0; letter-spacing: -2.5px; }
 
-    /* Details Section */
+    /* Refined Details Box */
     .details-box {
       width: 100%;
-      border: 1px solid #e8e8e8;
-      border-radius: 10px;
-      padding: 18px 22px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border: 1px solid #e2e2e2;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       text-align: left;
     }
 
-    .fare-title { font-size: 24px; font-weight: 500; color: #333; margin-bottom: 6px; }
-    .location-text { font-size: 14px; color: #929292; margin-bottom: 25px; }
-    .expiry-text { font-size: 17px; font-weight: 700; color: #707070; }
-
-  </style>
-</head>
-<body>
-
-<div class="ticket-container">
-  <div class="top-bar">
-    <div class="close-x">✕</div>
-  </div>
-
-  <div class="header-text">
-    <h1>Metro Transit</h1>
-    <p>Show operator your ticket</p>
-  </div>
-
-  <div class="animation-container">
-    <div class="ripple"></div>
-    <div class="ripple"></div>
-    <div class="ripple"></div>
-    <div class="ripple"></div>
-    <div class="ripple"></div>
-    
-    <div class="logo-clipper">
-      <img src="logo.png" alt="Go-To" class="logo-img">
-    </div>
-  </div>
-
-  <div id="clock" class="ticket-clock">00:00:00 AM</div>
-
-  <div class="details-box">
-    <p class="fare-title">Adult Non-Rush Hour</p>
-    <p class="location-text">Minneapolis/ St. Paul Metro Area</p>
-    <p class="expiry-text">Expires <span id="expiration"></span></p>
-  </div>
-</div>
-
-<script>
-  function updateClock() {
-    const now = new Date();
-    const timeParts = now.toLocaleTimeString('en-US', { 
-      hour12: true, 
-      hour: 'numeric', 
-      minute: '2-digit', 
-      second: '2-digit' 
-    });
-    document.getElementById('clock').textContent = timeParts.toUpperCase();
-  }
-
-  function setExpiration() {
-    const now = new Date();
-    // Expiration is 2.5 hours from now
-    const exp = new Date(now.getTime() + (2.5 * 60 * 60 * 1000));
-    
-    const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
-    // Formats precisely to "Feb 15, 2026 at 9:06 PM"
-    let expStr = exp.toLocaleString('en-US', options).replace(',', ',');
-    document.getElementById('expiration').textContent = expStr;
-  }
-
-  setInterval(updateClock, 1000);
-  updateClock();
-  setExpiration();
-</script>
-
-</body>
-</html>
+    .fare-title { font-size: 26px; font-weight: 600; color: #333; margin-bottom: 4px; letter-spacing: -0.3px; }
+    .location-text { font-size: 15px; color: #8a8a8a; margin-bottom: 24px; font-weight: 400; }
+    .expiry-text { font-size: 18px; font-weight: 700; color: #5a5a5a; letter-spacing: -0.2px; }
+    .expiry-text span { font-weight: 700; }
